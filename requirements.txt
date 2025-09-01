@@ -1,0 +1,11 @@
+dlt
+dbt-snowflake
+snowflake-connector-python
+streamlit
+pandas
+python-dotenv
+sqlalchemy
+dagster
+dagit
+dagster-dbt
+dagster-snowflake
