@@ -60,7 +60,7 @@ if __name__ == "__main__":
     working_directory = Path(__file__).parent
     os.chdir(working_directory)
 
-    query = "bygg och anläggning, Kultur, media, design, Pedagogik"
+    query = ""
     table_name = "job_ads"
 
     # Bygg och anläggning, "Kultur, media, design", "Pedagogik"
