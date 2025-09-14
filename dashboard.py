@@ -17,20 +17,39 @@ st.title("HR Analytics Dashboard")
 tabs = st.tabs(["Översikt", "Bygg & Anläggning", "Kultur/Media/Design", "Pedagogik"])
 
 # ----------------------------
-# Tab 1: Översikt
+# Flik 1: Översikt
 # ----------------------------
 with tabs[0]:
     st.header("Översikt (alla tabeller)")
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Totalt antal annonser", int(df_all["VACANCIES"].sum()))
-    col2.metric("Unika yrken", df_all["OCCUPATION"].nunique())
-    col3.metric("Genomsnittlig relevans", round(df_all["RELEVANCE"].mean(), 2))
+    # KPI-beräkningar
+    total_annons = len(df_all)
+    total_tjanster = int(df_all["VACANCIES"].sum())
+    unika_yrken = df_all["OCCUPATION"].nunique()
+    antal_yrkesomraden = df_all["OCCUPATION_FIELD"].nunique()
+    storsta_yrkesomrade = df_all.groupby("OCCUPATION_FIELD")["VACANCIES"].sum().idxmax()
+    mest_annons_yrke = df_all.groupby("OCCUPATION")["VACANCIES"].sum().idxmax()
 
-    st.subheader("Vacancies per Occupation Field")
+    # Layout med 6 KPI-boxar
+    col1, col2, col3 = st.columns(3)
+    col4, col5, col6 = st.columns(3)
+
+    col1.metric("Totalt antal annonser", total_annons)
+    col2.metric("Totalt antal tjänster", total_tjanster)
+    col3.metric("Antal unika yrken", unika_yrken)
+    col4.metric("Antal yrkesområden", antal_yrkesomraden)
+    col5.metric("Största yrkesområde", storsta_yrkesomrade)
+    col6.metric("Mest annonserade yrke", mest_annons_yrke)
+
+    st.subheader("Antal annonser per yrkesområde")
     field_summary = df_all.groupby("OCCUPATION_FIELD")["VACANCIES"].sum().reset_index()
     fig_fields = px.bar(field_summary, x="OCCUPATION_FIELD", y="VACANCIES", text="VACANCIES")
-    fig_fields.update_layout(xaxis_tickangle=0, xaxis={'categoryorder':'total descending'})
+    fig_fields.update_layout(
+        xaxis_tickangle=0,
+        xaxis={'categoryorder':'total descending'},
+        xaxis_title=None,
+        yaxis_title=None
+    )
     st.plotly_chart(fig_fields, use_container_width=True)
 
     st.subheader("Topp 10 yrken (alla tabeller)")
@@ -42,11 +61,16 @@ with tabs[0]:
         .reset_index()
     )
     fig_top = px.bar(top_jobs, x="OCCUPATION", y="VACANCIES", text="VACANCIES")
-    fig_top.update_layout(xaxis_tickangle=0, xaxis={'categoryorder':'total descending'})
+    fig_top.update_layout(
+        xaxis_tickangle=-45,
+        xaxis={'categoryorder':'total descending'},
+        xaxis_title=None,
+        yaxis_title=None
+    )
     st.plotly_chart(fig_top, use_container_width=True)
 
 # ----------------------------
-# Tab 2: Bygg & Anläggning
+# Flik 2: Bygg & Anläggning
 # ----------------------------
 with tabs[1]:
     st.header("Bygg & Anläggning")
@@ -55,13 +79,18 @@ with tabs[1]:
 
     top_10 = df_bygg.groupby("OCCUPATION")["VACANCIES"].sum().sort_values(ascending=False).head(10).reset_index()
     fig_bygg = px.bar(top_10, x="OCCUPATION", y="VACANCIES", text="VACANCIES")
-    fig_bygg.update_layout(xaxis_tickangle=0, xaxis={'categoryorder':'total descending'})
+    fig_bygg.update_layout(
+        xaxis_tickangle=0,
+        xaxis={'categoryorder':'total descending'},
+        xaxis_title=None,
+        yaxis_title=None
+    )
     st.plotly_chart(fig_bygg, use_container_width=True)
 
     st.dataframe(df_bygg)
 
 # ----------------------------
-# Tab 3: Kultur/Media/Design
+# Flik 3: Kultur/Media/Design
 # ----------------------------
 with tabs[2]:
     st.header("Kultur / Media / Design")
@@ -70,13 +99,18 @@ with tabs[2]:
 
     top_10 = df_kultur.groupby("OCCUPATION")["VACANCIES"].sum().sort_values(ascending=False).head(10).reset_index()
     fig_kultur = px.bar(top_10, x="OCCUPATION", y="VACANCIES", text="VACANCIES")
-    fig_kultur.update_layout(xaxis_tickangle=0, xaxis={'categoryorder':'total descending'})
+    fig_kultur.update_layout(
+        xaxis_tickangle=0,
+        xaxis={'categoryorder':'total descending'},
+        xaxis_title=None,
+        yaxis_title=None
+    )
     st.plotly_chart(fig_kultur, use_container_width=True)
 
     st.dataframe(df_kultur)
 
 # ----------------------------
-# Tab 4: Pedagogik
+# Flik 4: Pedagogik
 # ----------------------------
 with tabs[3]:
     st.header("Pedagogik")
@@ -85,7 +119,12 @@ with tabs[3]:
 
     top_10 = df_pedagogik.groupby("OCCUPATION")["VACANCIES"].sum().sort_values(ascending=False).head(10).reset_index()
     fig_pedagogik = px.bar(top_10, x="OCCUPATION", y="VACANCIES", text="VACANCIES")
-    fig_pedagogik.update_layout(xaxis_tickangle=0, xaxis={'categoryorder':'total descending'})
+    fig_pedagogik.update_layout(
+        xaxis_tickangle=0,
+        xaxis={'categoryorder':'total descending'},
+        xaxis_title=None,
+        yaxis_title=None
+    )
     st.plotly_chart(fig_pedagogik, use_container_width=True)
 
     st.dataframe(df_pedagogik)
