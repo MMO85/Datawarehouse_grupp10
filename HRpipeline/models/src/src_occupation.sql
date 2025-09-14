@@ -1,4 +1,4 @@
-with stg_HR_JOBS as (select * from {{ source('HR_JOBS', 'stg_ads') }})
+with STG_HR_JOBS as (select * from {{ source('HR_JOBS', 'stg_ads') }})
 
 select
     occupation_group__concept_id as occupation_group_id,
@@ -6,4 +6,4 @@ select
     occupation__label as occupation,
     occupation_group__label as occupation_group,
     occupation_field__label as occupation_field
-from stg_HR_JOBS
+from STG_HR_JOBS 
