@@ -12,6 +12,8 @@ select
     o.occupation_field,
     f.application_deadline,
     j.headline,
+    j.description_text as job_description,
+    j.description_html as job_description_html,
     e.employer_name,
     d.employment_type,
     d.salary_type,
