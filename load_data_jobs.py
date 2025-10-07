@@ -5,6 +5,7 @@ from pathlib import Path
 import os
 
 
+# Extract
 def _get_ads(url_for_search, params):
     headers = {"accept": "application/json"}
     response = requests.get(url_for_search, headers=headers, params=params)
@@ -20,26 +21,19 @@ def jobsearch_resource(params):
     offset = 0
 
     while True:
-        # build this page’s params
         page_params = dict(params, offset=offset)
         data = _get_ads(url_for_search, page_params)
-
         hits = data.get("hits", [])
         if not hits:
-            # no more results
             break
-
-        # yield each ad on this page
         for ad in hits:
             yield ad
-
-        # if fewer than a full page was returned, we’re done
         if len(hits) < limit or offset > 1900:
             break
-
         offset += limit
 
 
+# Load
 def run_pipeline(query, table_name, occupation_fields):
     pipeline = dlt.pipeline(
         pipeline_name="HRpipeline",
@@ -59,11 +53,9 @@ def run_pipeline(query, table_name, occupation_fields):
 if __name__ == "__main__":
     working_directory = Path(__file__).parent
     os.chdir(working_directory)
-
     query = ""
     table_name = "job_ads"
 
     # Bygg och anläggning, "Kultur, media, design", "Pedagogik"
     occupation_fields = ("j7Cq_ZJe_GkT", "9puE_nYg_crq", "MVqp_eS8_kDZ")
-
     run_pipeline(query, table_name, occupation_fields)
