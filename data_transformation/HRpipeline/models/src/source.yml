@@ -1,0 +1,10 @@
+sources:
+  - name: HR_JOBS
+    schema: staging
+    tables:
+      - name: stg_ads
+        identifier: JOB_ADS
+        meta:
+          dagster:
+            asset_key: ['dlt_jobsearch_source_jobsearch_resource']
+      
